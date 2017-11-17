@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "123635491441",
+    "firebase_url": "https://myongdventure.firebaseio.com",
+    "project_id": "myongdventure",
+    "storage_bucket": "myongdventure.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123635491441:android:d4dfe1fb7dfcae10",
+        "android_client_info": {
+          "package_name": "com.myongji.myongdventure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123635491441-ceqn043geu4v0ec0f9417kugjf5r82an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myongji.myongdventure",
+            "certificate_hash": "c0919e25eafba3a2ef57df3b8b130aa1781be5a7"
+          }
+        },
+        {
+          "client_id": "123635491441-g20sfj6derlnkl4tt37u3ln84f9pqf4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDtQAQ_J7JY2IM-PNNwajKHiuSQabUcY0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123635491441-g20sfj6derlnkl4tt37u3ln84f9pqf4j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
