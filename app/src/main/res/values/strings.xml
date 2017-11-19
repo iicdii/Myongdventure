@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Myongdventure</string>
     <string name="app_title">명드벤처</string>
+    <string name="title_activity_main">Map</string>
 </resources>
