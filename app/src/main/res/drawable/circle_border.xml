@@ -1,0 +1,19 @@
+<layer-list xmlns:androi="http://schemas.android.com/apk/res/android">
+    <item
+        androi:top="4dp"
+        androi:right="4dp"
+        androi:bottom="4dp"
+        androi:left="4dp">
+        <shape
+            androi:shape="oval">
+            <solid androi:color="#4d4d4d"/>
+        </shape>
+    </item>
+    <item>
+        <shape
+            androi:shape="oval">
+            <stroke androi:width="2dp"
+                androi:color="#4d4d4d"/>
+        </shape>
+    </item>
+</layer-list>

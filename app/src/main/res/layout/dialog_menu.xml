@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.myongji.myongdventure.MenuDialog">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_border"
+            android:text="버튼1"
+            android:layout_weight="1"
+            android:onClick="btnClick"/>
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_border"
+            android:text="버튼2"
+            android:layout_weight="1"
+            android:onClick="btnClick"/>
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_border"
+            android:text="버튼3"
+            android:layout_weight="1"
+            android:onClick="btnClick"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_border"
+            android:text="버튼4"
+            android:layout_weight="1"
+            android:onClick="btnClick"/>
+
+        <Button
+            android:id="@+id/btn5"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_border"
+            android:text="버튼5"
+            android:layout_weight="1"
+            android:onClick="btnClick"/>
+
+        <Button
+            android:id="@+id/btn6"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_border"
+            android:text="버튼6"
+            android:layout_weight="1"
+            android:onClick="btnClick"/>
+
+    </LinearLayout>
+
+</LinearLayout>

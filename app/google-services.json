@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "123635491441-7rdrs16e8638vu2fo48j37gvf49dt1sj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myongji.myongdventure",
+            "certificate_hash": "277709ae00aa544ae9bbe90df2071c2042660073"
+          }
+        },
+        {
           "client_id": "123635491441-ceqn043geu4v0ec0f9417kugjf5r82an.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
