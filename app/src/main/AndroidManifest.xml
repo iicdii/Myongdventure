@@ -38,7 +38,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".QuestDetailActivity" />
+        <activity android:name=".MyQuestActivity" />
+        <activity android:name=".MyQuestDetailActivity"></activity>
     </application>
 
 </manifest>

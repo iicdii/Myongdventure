@@ -18,8 +18,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/circle_border"
             android:text="버튼1"
-            android:layout_weight="1"
-            android:onClick="btnClick"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn2"
@@ -28,8 +27,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/circle_border"
             android:text="버튼2"
-            android:layout_weight="1"
-            android:onClick="btnClick"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn3"
@@ -38,8 +36,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/circle_border"
             android:text="버튼3"
-            android:layout_weight="1"
-            android:onClick="btnClick"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -54,8 +51,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/circle_border"
             android:text="버튼4"
-            android:layout_weight="1"
-            android:onClick="btnClick"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn5"
@@ -64,8 +60,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/circle_border"
             android:text="버튼5"
-            android:layout_weight="1"
-            android:onClick="btnClick"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn6"
@@ -74,8 +69,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/circle_border"
             android:text="버튼6"
-            android:layout_weight="1"
-            android:onClick="btnClick"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
