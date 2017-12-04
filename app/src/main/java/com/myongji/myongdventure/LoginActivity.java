@@ -22,11 +22,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.myongji.myongdventure.schema.User;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DBHelper dbHelper = DBHelper.getInstance();
     private FirebaseAuth mAuth;
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
@@ -60,30 +65,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-
-        /*
-        // Write a message to the database
-        myRef.child("message").setValue("Hi");
-
-        // Read from the database
-        myRef.child("message").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.i("message", value);
-                TextView textView = findViewById(R.id.textView);
-                textView.setText(value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("myRef", "Failed to read value.", error.toException());
-            }
-        });
-        */
     }
 
     @Override
@@ -120,21 +101,42 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // 로그인 성공, update UI with the signed-in user's information
-                        Log.d("signIn", "signInWithCredential:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        // 로그인 실패 시 유저에게 메세지를 보여준다.
-                        Log.w("signIn:failure", "signInWithCredential:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                        //updateUI(null);
-                    }
+                if (task.isSuccessful()) {
+                    // 로그인 성공, update UI with the signed-in user's information
+                    Log.d("signIn", "signInWithCredential:success");
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    final String userUid = user.getUid();
 
-                    // ...
+                    // Users 테이블에 user가 있는지 확인
+                    myRef.child("users/" + userUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // user가 없으면 신규 생성
+                            // 있으면 dbHelper가 현재 사용자 정보를 계속 갖고있게 함
+                            if (dataSnapshot.getValue() == null) {
+                                dbHelper.writeNewUser(userUid, user.getDisplayName(), user.getEmail());
+                            } else {
+                                dbHelper.initUserListener(userUid);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.i("user", databaseError.getMessage());
+                        }
+                    });
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    // 로그인 실패 시 유저에게 메세지를 보여준다.
+                    Log.w("signIn:failure", "signInWithCredential:failure", task.getException());
+                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    //updateUI(null);
+                }
+
+                // ...
                 }
             });
     }

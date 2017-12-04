@@ -39,6 +39,21 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <service
+            android:name=".MyFirebaseInstanceIDService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity android:name=".QuestDetailActivity" />
         <activity android:name=".MyQuestActivity" />
         <activity android:name=".MyQuestDetailActivity"></activity>
