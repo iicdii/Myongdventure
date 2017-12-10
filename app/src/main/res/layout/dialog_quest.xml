@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:padding="20dp"
     tools:context="com.myongji.myongdventure.dialog.QuestDialog">
@@ -12,20 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_boardname"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#000"
         android:text="5공학관 퀘스트 게시판"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_countView"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:textColor="#000"
         android:text="총 0개의 퀘스트가 있습니다."/>
 
     <Button
         android:id="@+id/btn_questList"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20sp"
         android:text="퀘스트 목록" />
 
 </LinearLayout>

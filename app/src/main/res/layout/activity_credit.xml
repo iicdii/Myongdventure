@@ -6,22 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context="com.myongji.myongdventure.activity.CreditActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textColor="#000"
         android:text="만든이"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:textColor="#000"
         android:text="명지대학교 컴퓨터공학과 김하림 등 4명"/>
 
     <Button
         android:id="@+id/btn_mju"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:text="명지대학교로 이동"/>
 
 </LinearLayout>
