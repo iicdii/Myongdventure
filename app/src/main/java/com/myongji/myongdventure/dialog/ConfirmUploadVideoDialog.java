@@ -91,10 +91,10 @@ public class ConfirmUploadVideoDialog extends Dialog {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Toast.makeText(getContext(), "영상 업로드 성공", Toast.LENGTH_SHORT).show();
 
-                        myRef.child("userQuests").child(userId).child(uid).child("imageUrl").setValue(file);
+                        myRef.child("userQuests").child(userId).child(uid).child("videoUrl").setValue(downloadUrl.toString());
                         myRef.child("userQuests").child(userId).child(uid).child("status").setValue(Status.DONE);
                     }
                 });

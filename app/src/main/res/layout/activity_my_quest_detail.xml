@@ -12,18 +12,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_title"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textSize="30sp"
         android:text="퀘스트 이름"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_content"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textSize="20sp"
         android:text="퀘스트 내용"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_exp"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textSize="20sp"
         android:text="경험치"/>
 
     <LinearLayout
@@ -33,12 +42,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textSize="20sp"
             android:text="상태"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_status"
+            android:textColor="#000"
+            android:textSize="20sp"
             android:text=""/>
 
     </LinearLayout>
