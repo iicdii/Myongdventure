@@ -1,10 +1,7 @@
 package com.myongji.myongdventure.schema;
 
-import android.net.Uri;
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.myongji.myongdventure.enums.QuestType;
 import com.myongji.myongdventure.enums.Status;
 
 import java.util.HashMap;
@@ -19,8 +16,8 @@ public class UserQuest {
     public Status status;
     public int likeCount;
     public String title;
-    public Uri imageUrl;
-    public Uri videoUrl;
+    public String imageUrl;
+    public String videoUrl;
 
     public UserQuest() {
 

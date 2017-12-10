@@ -61,30 +61,20 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="사진 찍기" />
-
-            <Button
-                android:id="@+id/btn_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="영상 찍기" />
-
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <Button
+            android:id="@+id/btn_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="다른 용사들의 업적 보기"/>
+            android:text="사진 찍기" />
+
+        <Button
+            android:id="@+id/btn_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="영상 찍기" />
 
     </LinearLayout>
 
