@@ -33,14 +33,10 @@
                 android:text="사진 찍기" />
 
             <Button
+                android:id="@+id/btn_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="영상 찍기" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="녹음 하기" />
 
         </LinearLayout>
 

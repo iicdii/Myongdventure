@@ -28,8 +28,9 @@ import java.util.List;
 
 public class MyQuestDetailActivity extends AppCompatActivity {
     Button btn1;
+    Button btn2;
     ImageView imageView;
-    private String imagePath;
+    private String path;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -50,9 +51,9 @@ public class MyQuestDetailActivity extends AppCompatActivity {
 
                     // 찍은 사진을 보관할 파일 객체를 만들어서 보낸다.
                     File picture = savePictureFile();
-                    Uri contentUri = FileProvider.getUriForFile(view.getContext(), "com.myongji.myongdventure.fileprovider", picture);
 
                     if (picture != null) {
+                        Uri contentUri = FileProvider.getUriForFile(view.getContext(), "com.myongji.myongdventure.fileprovider", picture);
                         cameraApp.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
                         startActivityForResult(cameraApp, 10000);
                     }
@@ -60,6 +61,30 @@ public class MyQuestDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MyQuestDetailActivity.this, "카메라 앱을 설치하세요.", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        btn2 = (Button)findViewById(R.id.btn_video);
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Video Application이 있으면
+                if(isExistsVideoApplication()) {
+
+                    // Video Application을 실행한다.
+                    Intent videoApp = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+
+                    // 찍은 영상을 보관할 파일 객체를 만들어서 보낸다.
+                    File video = saveVideoFile();
+
+                    if(video != null) {
+                        Uri contentUri = FileProvider.getUriForFile(view.getContext(), "com.myongji.myongdventure.fileprovider", video);
+                        videoApp.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+                        startActivityForResult(videoApp, 15000);
+                    }
+                }
+
             }
         });
     }
@@ -77,8 +102,14 @@ public class MyQuestDetailActivity extends AppCompatActivity {
             factory.inJustDecodeBounds = false;
             factory.inPurgeable = true;
 
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, factory);
+            Bitmap bitmap = BitmapFactory.decodeFile(path, factory);
             imageView.setImageBitmap(bitmap);
+        }
+
+        // 영상찍기 버튼을 누른 후 잘 찍고 돌아왔다면
+        if(requestCode == 15000 && resultCode == RESULT_OK) {
+
+            Toast.makeText(this, "영상촬영완료!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -96,6 +127,22 @@ public class MyQuestDetailActivity extends AppCompatActivity {
 
         // 카메라 App이 적어도 한개 이상 있는지 리턴
         return cameraApps.size() > 0;
+    }
+
+    //    Android에 Camera Application이 설치되어 있는지 확인한다.
+    //    @return 카메라 앱이 있으면 true, 없으면 false
+    private boolean isExistsVideoApplication() {
+        // Android의 모든 Application을 얻어온다.
+        PackageManager packageManager = getPackageManager();
+
+        // Video Application
+        Intent videoApp = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+
+        // MediaStore.ACTION_VIDEO_CAPTURE를 처리할 수 있는 App 정보를 가져온다.
+        List videoApps = packageManager.queryIntentActivities(videoApp, PackageManager.MATCH_DEFAULT_ONLY);
+
+        // 비디오 App이 적어도 한개 이상 있는지 리턴
+        return videoApps.size() > 0;
     }
 
     //    카메라에서 찍은 사진을 외부 저장소에 저장한다.
@@ -128,11 +175,10 @@ public class MyQuestDetailActivity extends AppCompatActivity {
             String fileName = "IMG_" + timestamp;
 
             // 사진파일이 저장될 장소를 구한다.
-            // 외장메모리에서 사진을 저장하는 폴더를 찾아서
             // 그곳에 MYAPP 이라는 폴더를 만든다.
             File pictureStorage = new File(
                     Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES), "MYAPP/");
+                            Environment.DIRECTORY_DCIM), "MYAPP/");
 
             // 만약 장소가 존재하지 않는다면 폴더를 새롭게 만든다.
             if(!pictureStorage.exists()) {
@@ -145,12 +191,81 @@ public class MyQuestDetailActivity extends AppCompatActivity {
                 File file = File.createTempFile(fileName, ".jpg", pictureStorage);
 
                 // ImageView에 보여주기 위해 사진파일의 절대 경로를 얻어온다.
-                imagePath = file.getAbsolutePath();
+                path = file.getAbsolutePath();
 
                 // 찍힌 사진을 "갤러리" 앱에 추가한다.
                 Intent mediaScanIntent =
                         new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                File f = new File(imagePath);
+                File f = new File(path);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+
+                return file;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        // 사용자가 권한을 거부한 경우
+        else {
+
+        }
+
+        return null;
+    }
+
+    //    카메라에서 찍은 비디오를 외부 저장소에 저장한다.
+    //    @return
+    private File saveVideoFile() {
+        // 외부 저장소 쓰기 권한을 얻어온다.
+        PermissionRequester.Builder requester = new PermissionRequester.Builder(this);
+
+        int result = requester
+                .create()
+                .request(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        20000,
+                        new PermissionRequester.OnClickDenyButtonListener() {
+                            @Override
+                            public void onClick(Activity activity) {
+
+                            }
+                        }
+                );
+
+        // 사용자가 권한을 수락한 경우
+        if(result == PermissionRequester.ALREADY_GRANTED
+                || result == PermissionRequester.REQUEST_PERMISSION) {
+
+            // 비디오 파일의 이름을 만든다.
+            // Date는 java.util을 import 한다.
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                    .format(new Date());
+            String fileName = "VIDEO_" + timestamp;
+
+            // 비디오파일이 저장될 장소를 구한다.
+            // 그곳에 MYAPP 이라는 폴더를 만든다.
+            File pictureStorage = new File(
+                    Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DCIM), "MYAPP/");
+
+            // 만약 장소가 존재하지 않는다면 폴더를 새롭게 만든다.
+            if(!pictureStorage.exists()) {
+                // mkdir는 폴더를 하나만 만들고,
+                // mkdirs는 경로상에 존재하는 모든 폴더를 만들어준다.
+                pictureStorage.mkdirs();
+            }
+
+            try {
+                File file = File.createTempFile(fileName, ".mp4", pictureStorage);
+
+                // ImageView에 보여주기 위해 사진파일의 절대 경로를 얻어온다.
+                path = file.getAbsolutePath();
+
+                // 찍힌 영상을 "갤러리" 앱에 추가한다.
+                Intent mediaScanIntent =
+                        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                File f = new File(path);
                 Uri contentUri = Uri.fromFile(f);
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
