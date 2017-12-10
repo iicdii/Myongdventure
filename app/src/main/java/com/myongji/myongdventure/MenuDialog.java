@@ -26,8 +26,11 @@ public class MenuDialog extends Dialog {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                QuestDialog questDialog = new QuestDialog(view.getContext());
-                questDialog.show();
+//                QuestDialog questDialog = new QuestDialog(view.getContext());
+//                questDialog.show();
+
+                Intent intent = new Intent(view.getContext(), ProfileActivity.class);
+                view.getContext().startActivity(intent);
             }
         });
 
@@ -36,6 +39,24 @@ public class MenuDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), MyQuestActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        Button btn3 = (Button)findViewById(R.id.btn3);
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), SettingActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        Button btn4 = (Button)findViewById(R.id.btn4);
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CreditActivity.class);
                 view.getContext().startActivity(intent);
             }
         });

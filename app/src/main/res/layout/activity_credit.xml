@@ -3,36 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.myongji.myongdventure.QuestDetailActivity">
+    android:orientation="vertical"
+    tools:context="com.myongji.myongdventure.CreditActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="퀘스트 이름"/>
+        android:text="만든이"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="퀘스트 내용"/>
+        android:text="명지대학교 컴퓨터공학과 김하림 등 4명"/>
 
-    <LinearLayout
+    <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수락"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="거절"/>
-
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="명지대학교로 이동"/>
 
 </LinearLayout>

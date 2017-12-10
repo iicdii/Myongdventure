@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="#fff"
     tools:context="com.myongji.myongdventure.MenuDialog">
 
     <LinearLayout
@@ -15,27 +16,28 @@
             android:id="@+id/btn1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/circle_border"
-            android:text="버튼1"
+            android:text="내 정보"
+            android:textColor="#fff"
+            android:textSize="20sp"
             android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn2"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="25dp"
             android:background="@drawable/circle_border"
-            android:text="버튼2"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn3"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/circle_border"
-            android:text="버튼3"
+            android:text="내 퀘스트"
+            android:textColor="#fff"
+            android:textSize="20sp"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -45,30 +47,29 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/btn3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/circle_border"
+            android:text="설정"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:layout_weight="1"/>
+
+        <Button
             android:id="@+id/btn4"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="25dp"
             android:background="@drawable/circle_border"
-            android:text="버튼4"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn5"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/circle_border"
-            android:text="버튼5"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn6"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/circle_border"
-            android:text="버튼6"
+            android:text="제작진"
+            android:textColor="#fff"
+            android:textSize="20sp"
             android:layout_weight="1"/>
 
     </LinearLayout>
