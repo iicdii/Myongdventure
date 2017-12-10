@@ -3,6 +3,7 @@ package com.myongji.myongdventure.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.myongji.myongdventure.R;
@@ -19,7 +20,10 @@ public class WepViewActivity extends AppCompatActivity {
         String url = intent.getExtras().getString("page");
 
         webView = (WebView)findViewById(R.id.webView1);
-        webView.getSettings().setJavaScriptEnabled(true);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setJavaScriptEnabled(true);
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient());
     }
