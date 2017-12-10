@@ -49,16 +49,16 @@ public class ProfileActivity extends AppCompatActivity {
                         String nextExp = String.valueOf((currentUser.level + 2) * currentUser.level * 5);
                         String fullExp = exp + " / " + nextExp;
 
-//                        TextView usernameTextView = findViewById(R.id.tv_username);
-//                        usernameTextView.setText(levelName);
-//                        TextView userexpTextView = findViewById(R.id.tv_userexp);
-//                        userexpTextView.setText(fullExp);
-//
-//                        Uri imageUrl = firebaseUser.getPhotoUrl();
-//                        if (imageUrl != null) {
-//                            ImageView userImageView = findViewById(R.id.iv_profile);
-//                            Picasso.with(getApplicationContext()).load(imageUrl).into(userImageView);
-//                        }
+                        TextView usernameTextView = findViewById(R.id.tv_myusername);
+                        usernameTextView.setText(levelName);
+                        TextView userexpTextView = findViewById(R.id.tv_myuserexp);
+                        userexpTextView.setText(fullExp);
+
+                        Uri imageUrl = firebaseUser.getPhotoUrl();
+                        if (imageUrl != null) {
+                            ImageView userImageView = findViewById(R.id.iv_myprofile);
+                            Picasso.with(getApplicationContext()).load(imageUrl).into(userImageView);
+                        }
                     }
                 }
 

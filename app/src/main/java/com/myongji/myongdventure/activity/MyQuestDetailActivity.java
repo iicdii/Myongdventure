@@ -4,8 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -95,15 +93,7 @@ public class MyQuestDetailActivity extends AppCompatActivity {
         // 사진찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 10000 && resultCode == RESULT_OK) {
             // 사진을 ImageView에 보여준다.
-            BitmapFactory.Options factory = new BitmapFactory.Options();
-
-            factory.inJustDecodeBounds = false;
-            factory.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(path, factory);
-
-            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, bitmap);
-
+            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, path);
             pictureDialog.show();
         }
 
