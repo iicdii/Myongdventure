@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_countView"
-        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:textColor="#000"
         android:text="총 0개의 퀘스트가 있습니다."/>
 
     <ListView
