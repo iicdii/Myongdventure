@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="20dp"
     tools:context="com.myongji.myongdventure.dialog.QuestDialog">
 
     <TextView
@@ -16,12 +17,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_remainquest"
-        android:text="총 6개의 퀘스트가 있습니다."/>
+        android:id="@+id/tv_countView"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="총 0개의 퀘스트가 있습니다."/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/lv_quest"/>
+    <Button
+        android:id="@+id/btn_questList"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="퀘스트 목록" />
 
 </LinearLayout>

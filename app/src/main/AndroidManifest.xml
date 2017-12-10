@@ -83,6 +83,7 @@
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.CreditActivity" />
         <activity android:name=".activity.WepViewActivity" />
+        <activity android:name=".activity.QuestActivity"></activity>
     </application>
 
 </manifest>
