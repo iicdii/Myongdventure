@@ -2,6 +2,7 @@ package com.myongji.myongdventure.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.myongji.myongdventure.R;
+import com.myongji.myongdventure.activity.MainActivity;
 import com.myongji.myongdventure.enums.Status;
 
 import java.io.File;
@@ -100,6 +102,9 @@ public class ConfirmUploadVideoDialog extends Dialog {
                 });
 
                 cancel();
+
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                view.getContext().startActivity(intent);
             }
         });
     }
