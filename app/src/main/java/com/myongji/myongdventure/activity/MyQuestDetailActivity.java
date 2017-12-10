@@ -46,6 +46,7 @@ public class MyQuestDetailActivity extends AppCompatActivity {
     private DatabaseReference myRef = database.getReference();
     private String uid;
     private Query mQuery;
+    private Quest mQuest;
 
     Button btn1;
     Button btn2;
@@ -80,17 +81,17 @@ public class MyQuestDetailActivity extends AppCompatActivity {
 
                         for (DataSnapshot d : questSnapshot.getChildren()) {
                             if (d.getKey().equals(uid)) {
-                                Quest quest = d.getValue(Quest.class);
+                                mQuest = d.getValue(Quest.class);
 
-                                if (quest == null) return;
+                                if (mQuest == null) return;
 
                                 TextView titleView = findViewById(R.id.tv_title);
-                                titleView.setText(quest.title);
+                                titleView.setText(mQuest.title);
                                 TextView contentView = findViewById(R.id.tv_content);
-                                contentView.setText(quest.content);
+                                contentView.setText(mQuest.content);
                                 TextView expView = findViewById(R.id.tv_exp);
 
-                                String exp = String.valueOf(quest.exp);
+                                String exp = String.valueOf(mQuest.exp);
                                 String expText = "경험치: " + exp;
 
                                 TextView statusView = findViewById(R.id.tv_status);
@@ -174,14 +175,14 @@ public class MyQuestDetailActivity extends AppCompatActivity {
         // 사진찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 10000 && resultCode == RESULT_OK) {
             // 사진을 ImageView에 보여준다.
-            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, path, uid);
+            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, path, uid, mQuest.exp);
             pictureDialog.show();
         }
 
         // 영상찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 15000 && resultCode == RESULT_OK) {
             // 영상을 VideioView에 보여준다.
-            ConfirmUploadVideoDialog videoDialog = new ConfirmUploadVideoDialog(this, path, uid);
+            ConfirmUploadVideoDialog videoDialog = new ConfirmUploadVideoDialog(this, path, uid, mQuest.exp);
             videoDialog.show();
         }
     }

@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
@@ -18,14 +19,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.myongji.myongdventure.R;
 import com.myongji.myongdventure.activity.MainActivity;
 import com.myongji.myongdventure.enums.Status;
+import com.myongji.myongdventure.schema.User;
 
 import java.io.File;
 
@@ -38,13 +43,15 @@ public class ConfirmUploadVideoDialog extends Dialog {
     VideoView videoView;
     SharedPreferences setting;
     String uid;
+    private int gainExp;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference();
 
-    public ConfirmUploadVideoDialog(@NonNull Context context, String path, String uid) {
+    public ConfirmUploadVideoDialog(@NonNull Context context, String path, String uid, int gainExp) {
         super(context);
         this.path = path;
         this.uid = uid;
+        this.gainExp = gainExp;
     }
 
     @Override
@@ -93,11 +100,41 @@ public class ConfirmUploadVideoDialog extends Dialog {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        final Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Toast.makeText(getContext(), "영상 업로드 성공", Toast.LENGTH_SHORT).show();
 
-                        myRef.child("userQuests").child(userId).child(uid).child("videoUrl").setValue(downloadUrl.toString());
-                        myRef.child("userQuests").child(userId).child(uid).child("status").setValue(Status.DONE);
+                        // 유저정보 가져오기
+                        myRef.child("users").child(userId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                // This method is called once with the initial value and again
+                                // whenever data at this location is updated.
+                                User currentUser = dataSnapshot.getValue(User.class);
+
+                                if (currentUser != null) {
+                                    int level = currentUser.level;
+                                    int exp = currentUser.exp;
+
+                                    if (exp + gainExp > level) {
+                                        level += 1;
+                                        exp = 0;
+                                    } else {
+                                        exp += gainExp;
+                                    }
+
+                                    myRef.child("userQuests").child(userId).child(uid).child("level").setValue(level);
+                                    myRef.child("userQuests").child(userId).child(uid).child("exp").setValue(exp);
+                                    myRef.child("userQuests").child(userId).child(uid).child("videoUrl").setValue(downloadUrl.toString());
+                                    myRef.child("userQuests").child(userId).child(uid).child("status").setValue(Status.DONE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                                Log.w("myRef", "Failed to read value.", error.toException());
+                            }
+                        });
                     }
                 });
 
