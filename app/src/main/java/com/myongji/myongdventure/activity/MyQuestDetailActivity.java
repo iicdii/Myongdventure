@@ -14,11 +14,12 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.myongji.myongdventure.PermissionRequester;
 import com.myongji.myongdventure.R;
+import com.myongji.myongdventure.dialog.ConfirmUploadPictureDialog;
+import com.myongji.myongdventure.dialog.ConfirmUploadVideoDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,6 @@ import java.util.List;
 public class MyQuestDetailActivity extends AppCompatActivity {
     Button btn1;
     Button btn2;
-    ImageView imageView;
     private String path;
 
     @Override
@@ -37,7 +37,6 @@ public class MyQuestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_quest_detail);
 
-        imageView = (ImageView)findViewById(R.id.iv_result);
         btn1 = (Button)findViewById(R.id.btn_picture);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +94,6 @@ public class MyQuestDetailActivity extends AppCompatActivity {
 
         // 사진찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 10000 && resultCode == RESULT_OK) {
-
             // 사진을 ImageView에 보여준다.
             BitmapFactory.Options factory = new BitmapFactory.Options();
 
@@ -103,13 +101,17 @@ public class MyQuestDetailActivity extends AppCompatActivity {
             factory.inPurgeable = true;
 
             Bitmap bitmap = BitmapFactory.decodeFile(path, factory);
-            imageView.setImageBitmap(bitmap);
+
+            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, bitmap);
+
+            pictureDialog.show();
         }
 
         // 영상찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 15000 && resultCode == RESULT_OK) {
-
-            Toast.makeText(this, "영상촬영완료!", Toast.LENGTH_SHORT).show();
+            // 영상을 VideioView에 보여준다.
+            ConfirmUploadVideoDialog videoDialog = new ConfirmUploadVideoDialog(this, path);
+            videoDialog.show();
         }
     }
 
@@ -259,7 +261,7 @@ public class MyQuestDetailActivity extends AppCompatActivity {
             try {
                 File file = File.createTempFile(fileName, ".mp4", pictureStorage);
 
-                // ImageView에 보여주기 위해 사진파일의 절대 경로를 얻어온다.
+                // VideoView에 보여주기 위해 영상파일의 절대 경로를 얻어온다.
                 path = file.getAbsolutePath();
 
                 // 찍힌 영상을 "갤러리" 앱에 추가한다.

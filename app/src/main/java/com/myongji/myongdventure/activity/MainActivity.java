@@ -45,7 +45,7 @@ import com.google.android.gms.tasks.Task;
 import com.myongji.myongdventure.BuildConfig;
 import com.myongji.myongdventure.Constants;
 import com.myongji.myongdventure.GeofenceTransitionsIntentService;
-import com.myongji.myongdventure.MenuDialog;
+import com.myongji.myongdventure.dialog.MenuDialog;
 import com.myongji.myongdventure.R;
 
 import java.util.ArrayList;

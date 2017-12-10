@@ -1,4 +1,4 @@
-package com.myongji.myongdventure;
+package com.myongji.myongdventure.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 
+import com.myongji.myongdventure.R;
 import com.myongji.myongdventure.activity.CreditActivity;
 import com.myongji.myongdventure.activity.MyQuestActivity;
 import com.myongji.myongdventure.activity.ProfileActivity;
