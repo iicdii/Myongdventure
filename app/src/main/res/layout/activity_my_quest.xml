@@ -19,9 +19,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_myremainquest"
         android:padding="10dp"
         android:textColor="#000"
+        android:id="@+id/tv_countView"
         android:text="총 0개의 진행중인 퀘스트가 있습니다."/>
 
     <ListView

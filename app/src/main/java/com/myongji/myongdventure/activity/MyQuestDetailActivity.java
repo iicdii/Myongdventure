@@ -10,14 +10,30 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.myongji.myongdventure.PermissionRequester;
 import com.myongji.myongdventure.R;
 import com.myongji.myongdventure.dialog.ConfirmUploadPictureDialog;
 import com.myongji.myongdventure.dialog.ConfirmUploadVideoDialog;
+import com.myongji.myongdventure.enums.Status;
+import com.myongji.myongdventure.schema.Quest;
+import com.myongji.myongdventure.schema.UserQuest;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +42,11 @@ import java.util.Date;
 import java.util.List;
 
 public class MyQuestDetailActivity extends AppCompatActivity {
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference();
+    private String uid;
+    private Query mQuery;
+
     Button btn1;
     Button btn2;
     private String path;
@@ -35,7 +56,67 @@ public class MyQuestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_quest_detail);
 
-        btn1 = (Button)findViewById(R.id.btn_picture);
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
+        Log.i("uid", uid);
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final String userId = firebaseUser.getUid();
+
+        mQuery = myRef.child("userQuests").child(userId).child(uid);
+        final Query query = mQuery;
+
+        // 퀘스트 정보 가져오기
+        myRef.child("quests").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot questSnapshot) {
+                // 내 퀘스트 정보 가져오기
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot userQuestSnapshot) {
+                        UserQuest userQuest = userQuestSnapshot.getValue(UserQuest.class);
+
+                        if (userQuest == null) return;
+
+                        for (DataSnapshot d : questSnapshot.getChildren()) {
+                            if (d.getKey().equals(uid)) {
+                                Quest quest = d.getValue(Quest.class);
+
+                                if (quest == null) return;
+
+                                TextView titleView = findViewById(R.id.tv_title);
+                                titleView.setText(quest.title);
+                                TextView contentView = findViewById(R.id.tv_content);
+                                contentView.setText(quest.content);
+                                TextView expView = findViewById(R.id.tv_exp);
+
+                                String exp = String.valueOf(quest.exp);
+                                String expText = "경험치: " + exp;
+
+                                TextView statusView = findViewById(R.id.tv_status);
+                                statusView.setText(userQuest.getStatusText());
+
+                                expView.setText(expText);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("myRef", "Failed to read value.", error.toException());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("myRef", "Failed to read value.", error.toException());
+            }
+        });
+
+        btn1 = findViewById(R.id.btn_picture);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +142,7 @@ public class MyQuestDetailActivity extends AppCompatActivity {
             }
         });
 
-        btn2 = (Button)findViewById(R.id.btn_video);
+        btn2 = findViewById(R.id.btn_video);
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,14 +174,14 @@ public class MyQuestDetailActivity extends AppCompatActivity {
         // 사진찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 10000 && resultCode == RESULT_OK) {
             // 사진을 ImageView에 보여준다.
-            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, path);
+            ConfirmUploadPictureDialog pictureDialog = new ConfirmUploadPictureDialog(this, path, uid);
             pictureDialog.show();
         }
 
         // 영상찍기 버튼을 누른 후 잘 찍고 돌아왔다면
         if(requestCode == 15000 && resultCode == RESULT_OK) {
             // 영상을 VideioView에 보여준다.
-            ConfirmUploadVideoDialog videoDialog = new ConfirmUploadVideoDialog(this, path);
+            ConfirmUploadVideoDialog videoDialog = new ConfirmUploadVideoDialog(this, path, uid);
             videoDialog.show();
         }
     }

@@ -64,7 +64,10 @@ public class QuestDetailActivity extends AppCompatActivity {
     public void handleAccept(View view) {
         final Activity mActivity = this;
 
-        myRef.child("userQuests").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final String userId = firebaseUser.getUid();
+
+        myRef.child("userQuests").child(userId).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserQuest userQuest = dataSnapshot.getValue(UserQuest.class);
@@ -72,12 +75,12 @@ public class QuestDetailActivity extends AppCompatActivity {
                 // 데이터가 있으면 이미 받은 퀘스트이므로 리턴한다.
                 if (userQuest != null) return;
 
-                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                String userId = firebaseUser.getUid();
+                TextView titleView = findViewById(R.id.tv_title);
+                String title = String.valueOf(titleView.getText());
 
-                UserQuest newQuest = new UserQuest(Status.ONGOING, userId);
+                UserQuest newQuest = new UserQuest(Status.ONGOING, title);
 
-                myRef.child("userQuests").child(uid).setValue(newQuest);
+                myRef.child("userQuests").child(userId).child(uid).setValue(newQuest);
 
                 Intent intent = new Intent(mActivity, MainActivity.class);
                 mActivity.startActivity(intent);

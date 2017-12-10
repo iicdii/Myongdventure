@@ -15,10 +15,15 @@ import android.widget.VideoView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.myongji.myongdventure.R;
+import com.myongji.myongdventure.enums.Status;
 
 import java.io.File;
 
@@ -30,10 +35,14 @@ public class ConfirmUploadVideoDialog extends Dialog {
     String path;
     VideoView videoView;
     SharedPreferences setting;
+    String uid;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference();
 
-    public ConfirmUploadVideoDialog(@NonNull Context context, String path) {
+    public ConfirmUploadVideoDialog(@NonNull Context context, String path, String uid) {
         super(context);
         this.path = path;
+        this.uid = uid;
     }
 
     @Override
@@ -41,9 +50,12 @@ public class ConfirmUploadVideoDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_video);
 
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final String userId = firebaseUser.getUid();
+
         setting = getContext().getSharedPreferences("setting", 0);
 
-        videoView = (VideoView)findViewById(R.id.vv_video);
+        videoView = findViewById(R.id.vv_video);
 
         MediaController mediaController = new MediaController(getContext());
         videoView.setMediaController(mediaController);
@@ -51,7 +63,7 @@ public class ConfirmUploadVideoDialog extends Dialog {
         videoView.requestFocus();
         videoView.start();
 
-        Button btn = (Button)findViewById(R.id.btn_confirmvideo);
+        Button btn = findViewById(R.id.btn_confirmvideo);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +76,7 @@ public class ConfirmUploadVideoDialog extends Dialog {
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReference();
-                Uri file = Uri.fromFile(new File(path));
+                final Uri file = Uri.fromFile(new File(path));
                 StorageReference riversRef = storageRef.child(file.getLastPathSegment());
                 UploadTask uploadTask = riversRef.putFile(file);
 
@@ -81,6 +93,9 @@ public class ConfirmUploadVideoDialog extends Dialog {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
 //                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Toast.makeText(getContext(), "영상 업로드 성공", Toast.LENGTH_SHORT).show();
+
+                        myRef.child("userQuests").child(userId).child(uid).child("imageUrl").setValue(file);
+                        myRef.child("userQuests").child(userId).child(uid).child("status").setValue(Status.DONE);
                     }
                 });
 

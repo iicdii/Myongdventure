@@ -18,14 +18,35 @@ import java.util.Map;
 public class UserQuest {
     public Status status;
     public int likeCount;
-    public String userId;
+    public String title;
     public Uri imageUrl;
     public Uri videoUrl;
 
-    public UserQuest(Status status, String userId) {
+    public UserQuest() {
+
+    }
+
+    public UserQuest(Status status, String title) {
         this.status = status;
+        this.title = title;
         this.likeCount = 0;
-        this.userId = userId;
+    }
+
+    public String getStatusText() {
+        String statusText = "";
+
+        switch (this.status) {
+            case ONGOING:
+                statusText = "진행중";
+                break;
+            case DONE:
+                statusText = "완료";
+                break;
+            default:
+                break;
+        }
+
+        return statusText;
     }
 
     @Exclude
