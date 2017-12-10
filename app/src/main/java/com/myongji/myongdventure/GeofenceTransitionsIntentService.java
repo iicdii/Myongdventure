@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -64,6 +65,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            Log.i(TAG, "지오펜스에 들어오거나 나갔습니다.");
 
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
@@ -71,6 +73,24 @@ public class GeofenceTransitionsIntentService extends IntentService {
             // Get the transition details as a String.
             String geofenceTransitionDetails = getGeofenceTransitionDetails(geofenceTransition,
                     triggeringGeofences);
+
+            // 사용자가 지오펜스에 진입한 건물명을 local broadCast에 보낸다.
+
+            Intent buildingIntent = new Intent("googlegeofence");
+            buildingIntent.putExtra("building", geofenceTransitionDetails);
+            String status = "";
+            switch (geofenceTransition) {
+                case Geofence.GEOFENCE_TRANSITION_ENTER:
+                    status = "enter";
+                    break;
+                case Geofence.GEOFENCE_TRANSITION_EXIT:
+                    status = "exit";
+                    break;
+                default:
+                    break;
+            }
+            buildingIntent.putExtra("status", status);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(buildingIntent);
 
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails);

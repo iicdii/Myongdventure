@@ -12,12 +12,6 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String PACKAGE_NAME = "com.google.android.gms.location.Geofence";
-
-    public static final String SHARED_PREFERENCES_NAME = PACKAGE_NAME + ".SHARED_PREFERENCES_NAME";
-
-    public static final String GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY";
-
     /**
      * Used to set an expiration time for a geofence. After this amount of time Location Services
      * stops tracking the geofence.
@@ -32,7 +26,7 @@ public class Constants {
     public static final float GEOFENCE_RADIUS_IN_METERS = 30; // 300m
 
     /**
-     * Map for storing information about airports in the San Francisco bay area.
+     * 명지대학교 건물들에 대한 위치 정보를 저장한다.
      */
     public static final HashMap<String, LatLng> LANDMARKS = new HashMap<>();
     static {

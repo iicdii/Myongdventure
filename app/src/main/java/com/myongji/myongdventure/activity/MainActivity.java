@@ -2,7 +2,10 @@ package com.myongji.myongdventure.activity;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -14,6 +17,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -57,13 +61,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int UPDATE_INTERVAL_MS = 4000;
     private static final int FASTEST_UPDATE_INTERVAL_MS = 3000;
 
-    /**
-     * Tracks whether the user requested to add or remove geofences, or to do neither.
-     */
-    private enum PendingGeofenceTask {
-        ADD, REMOVE, NONE
-    }
-
     private GoogleMap mMap;
     private GeofencingClient mGeofencingClient;
     private Marker currentMarker = null;
@@ -100,10 +97,52 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onLocationResult(LocationResult locationResult) {
                 Log.i("위치", "위치가 업데이트 되었습니다.");
                 mLastLocation = locationResult.getLastLocation();
-                LatLng currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+                Log.i("위치 x", Double.toString(mLastLocation.getLatitude()));
+                Log.i("위치 y", Double.toString(mLastLocation.getLongitude()));
             };
         };
+
+        LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(this);
+        GoogleReceiver googleReceiver = new GoogleReceiver(this);
+        lbc.registerReceiver(googleReceiver, new IntentFilter("googlegeofence"));
+    }
+
+    static class GoogleReceiver extends BroadcastReceiver {
+        MainActivity mActivity;
+
+        public GoogleReceiver(Activity activity){
+            mActivity = (MainActivity) activity;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //Handle the intent here
+            String actionName = intent.getAction();
+
+            if (actionName == null)
+                return;
+
+            if (actionName.equals("googlegeofence")) {
+                String building = intent.getStringExtra("building");
+
+                if (intent.getStringExtra("status").equals("enter")) {
+                    if (mActivity.currentMarker == null) {
+                        LatLng location = Constants.LANDMARKS.get(building);
+                        Location buildingLocation = new Location(building);
+                        buildingLocation.setLatitude(location.latitude);
+                        buildingLocation.setLongitude(location.longitude);
+
+                        mActivity.setBuildingMarker(buildingLocation, building);
+                    }
+                } else if (intent.getStringExtra("status").equals("exit")) {
+                    if (mActivity.currentMarker != null) {
+                        mActivity.currentMarker.remove();
+                    }
+                }
+
+
+            }
+        }
     }
 
     @Override
@@ -349,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // 퍼미션 요청 전에 지도의 초기위치를 명지대로 이동
-        setCurrentLocation(null);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(DEFAULT_LOCATION));
         // 매끄럽게 이동함
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
@@ -370,7 +409,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         Log.i("위치 변경", "위치가 변경되었습니다.");
-        setCurrentLocation(location);
     }
 
     @Override
@@ -389,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     // 해당 location에 마커 찍기
-    public void setCurrentLocation(Location location) {
+    public void setBuildingMarker(Location location, String title) {
         if (currentMarker != null) currentMarker.remove();
 
         if (location != null) {
@@ -399,18 +437,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(currentLocation);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerOptions.snippet(title);
             currentMarker = mMap.addMarker(markerOptions);
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-            return;
         }
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(DEFAULT_LOCATION);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        currentMarker = mMap.addMarker(markerOptions);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(DEFAULT_LOCATION));
     }
 
     public void showDialog(View view) {
