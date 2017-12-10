@@ -57,6 +57,7 @@ import com.myongji.myongdventure.DBHelper;
 import com.myongji.myongdventure.GeofenceTransitionsIntentService;
 import com.myongji.myongdventure.dialog.MenuDialog;
 import com.myongji.myongdventure.R;
+import com.myongji.myongdventure.dialog.QuestDialog;
 import com.myongji.myongdventure.enums.Building;
 import com.myongji.myongdventure.enums.QuestType;
 import com.myongji.myongdventure.schema.Quest;
@@ -66,10 +67,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, OnCompleteListener<Void> {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, OnCompleteListener<Void>, GoogleMap.OnMarkerClickListener {
     // Internal List of Geofence objects. In a real app, these might be provided by an API based on
     // locations within the user's proximity.
     ArrayList<Geofence> mGeofenceList;
+
     private static final LatLng DEFAULT_LOCATION = new LatLng(37.2232318, 127.1880301);
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final int DEFAULT_ZOOM = 10;
@@ -460,6 +462,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLng(DEFAULT_LOCATION));
         // 매끄럽게 이동함
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.setOnMarkerClickListener(this);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
@@ -473,6 +476,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             requestPermissions();
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        String building = marker.getTitle();
+        QuestDialog questDialog = new QuestDialog(this, building);
+        questDialog.show();
+
+        return false;
     }
 
     @Override
@@ -506,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(currentLocation);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            markerOptions.snippet(title);
+            markerOptions.title(title);
             currentMarker = mMap.addMarker(markerOptions);
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));

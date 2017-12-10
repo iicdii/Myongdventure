@@ -29,9 +29,15 @@ import java.util.ArrayList;
 public class QuestDialog extends Dialog {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference();
+    private String building;
 
     public QuestDialog(@NonNull Context context) {
         super(context);
+    }
+
+    public QuestDialog(@NonNull Context context, String building) {
+        super(context);
+        this.building = building;
     }
 
     @Override
