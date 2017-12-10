@@ -1,13 +1,11 @@
 package com.myongji.myongdventure.activity;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.myongji.myongdventure.R;
@@ -61,29 +59,6 @@ public class SettingActivity extends AppCompatActivity {
                     editor.putInt("vibrator", 0);
                     editor.commit();
 //                    Toast.makeText(SettingActivity.this, "vibrator = " + setting.getInt("vibrator", 1), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-
-        Button btn1 = (Button)findViewById(R.id.btn_test1);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(setting.getInt("vibrator", 1) == 1)
-                    vibrator.vibrate(500);
-            }
-        });
-
-        Button btn2 = (Button)findViewById(R.id.btn_test2);
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(setting.getInt("sound", 1) == 1) {
-                    mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.ppap);
-                    mediaPlayer.setLooping(false);
-                    mediaPlayer.start();
                 }
             }
         });
