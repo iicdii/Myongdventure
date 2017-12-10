@@ -1,5 +1,7 @@
 package com.myongji.myongdventure.schema;
 
+import android.net.Uri;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.myongji.myongdventure.enums.QuestType;
@@ -13,12 +15,17 @@ import java.util.Map;
  */
 
 @IgnoreExtraProperties
-public class MyQuest {
+public class UserQuest {
     public Status status;
-    // TODO - 사진, 동영상 등 저장할 변수 필요
+    public int likeCount;
+    public String userId;
+    public Uri imageUrl;
+    public Uri videoUrl;
 
-    public MyQuest() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    public UserQuest(Status status, String userId) {
+        this.status = status;
+        this.likeCount = 0;
+        this.userId = userId;
     }
 
     @Exclude

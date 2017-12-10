@@ -473,6 +473,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new LatLng(mLastLocation.getLatitude(),
                                 mLastLocation.getLongitude()), DEFAULT_ZOOM));
             }
+
+            QuestDialog questDialog = new QuestDialog(this, "5공학관");
+            questDialog.show();
         } else {
             requestPermissions();
         }

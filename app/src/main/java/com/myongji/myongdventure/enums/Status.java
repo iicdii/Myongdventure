@@ -5,7 +5,6 @@ package com.myongji.myongdventure.enums;
  */
 
 public enum Status {
-    INIT, // 초기 상태
     ONGOING, // 진행중
     DONE // 완료
 }
