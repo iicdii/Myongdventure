@@ -57,6 +57,9 @@ import com.myongji.myongdventure.DBHelper;
 import com.myongji.myongdventure.GeofenceTransitionsIntentService;
 import com.myongji.myongdventure.dialog.MenuDialog;
 import com.myongji.myongdventure.R;
+import com.myongji.myongdventure.enums.Building;
+import com.myongji.myongdventure.enums.QuestType;
+import com.myongji.myongdventure.schema.Quest;
 import com.myongji.myongdventure.schema.User;
 import com.squareup.picasso.Picasso;
 
@@ -90,49 +93,47 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        String uid = intent.getStringExtra("userId");
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // 유저정보 가져오기
-        myRef.child("users").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                currentUser = dataSnapshot.getValue(User.class);
+        if (firebaseUser != null) {
+            String uid = firebaseUser.getUid();
 
-                if (currentUser != null) {
-                    String level = String.valueOf(currentUser.level);
-                    String name = String.valueOf(currentUser.name);
-                    String levelName = "Lv. " + level + " " + name;
-                    String exp = String.valueOf(currentUser.exp);
-                    String nextExp = String.valueOf((currentUser.level+2) * currentUser.level * 5);
-                    String fullExp = exp + " / " + nextExp;
+            // 유저정보 가져오기
+            myRef.child("users").child(uid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    currentUser = dataSnapshot.getValue(User.class);
 
-                    TextView usernameTextView = findViewById(R.id.tv_username);
-                    usernameTextView.setText(levelName);
-                    TextView userexpTextView = findViewById(R.id.tv_userexp);
-                    userexpTextView.setText(fullExp);
+                    if (currentUser != null) {
+                        String level = String.valueOf(currentUser.level);
+                        String name = String.valueOf(currentUser.name);
+                        String levelName = "Lv. " + level + " " + name;
+                        String exp = String.valueOf(currentUser.exp);
+                        String nextExp = String.valueOf((currentUser.level + 2) * currentUser.level * 5);
+                        String fullExp = exp + " / " + nextExp;
 
-                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        TextView usernameTextView = findViewById(R.id.tv_username);
+                        usernameTextView.setText(levelName);
+                        TextView userexpTextView = findViewById(R.id.tv_userexp);
+                        userexpTextView.setText(fullExp);
 
-                    if (firebaseUser == null)
-                        return;
-
-                    Uri imageUrl = firebaseUser.getPhotoUrl();
-                    if (imageUrl != null) {
-                        ImageView userImageView = findViewById(R.id.iv_profile);
-                        Picasso.with(getApplicationContext()).load(imageUrl).into(userImageView);
+                        Uri imageUrl = firebaseUser.getPhotoUrl();
+                        if (imageUrl != null) {
+                            ImageView userImageView = findViewById(R.id.iv_profile);
+                            Picasso.with(getApplicationContext()).load(imageUrl).into(userImageView);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("myRef", "Failed to read value.", error.toException());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w("myRef", "Failed to read value.", error.toException());
+                }
+            });
+        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(this);
         GoogleReceiver googleReceiver = new GoogleReceiver(this);
         lbc.registerReceiver(googleReceiver, new IntentFilter("googlegeofence"));
+
+
     }
 
     static class GoogleReceiver extends BroadcastReceiver {
@@ -187,16 +190,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (intent.getStringExtra("status").equals("enter")) {
                     if (mActivity.currentMarker == null) {
                         LatLng location = Constants.LANDMARKS.get(building);
+                        Log.i("building", String.valueOf(building));
+                        Log.i("LANDMARKS", String.valueOf("5공학관"));
+                        if (location == null)
+                            return;
 
-                        if (!Double.isNaN(location.latitude) && !Double.isNaN(location.longitude)) {
-                            Log.i("건물위치 x:", String.valueOf(location.latitude));
-                            Log.i("건물위치 y:", String.valueOf(location.longitude));
+                        Log.i("건물위치 x:", String.valueOf(location.latitude));
+                        Log.i("건물위치 y:", String.valueOf(location.longitude));
 
-                            Location buildingLocation = new Location(building);
-                            buildingLocation.setLatitude(location.latitude);
-                            buildingLocation.setLongitude(location.longitude);
-                            mActivity.setBuildingMarker(buildingLocation, building);
-                        }
+                        Location buildingLocation = new Location(building);
+                        buildingLocation.setLatitude(location.latitude);
+                        buildingLocation.setLongitude(location.longitude);
+                        mActivity.setBuildingMarker(buildingLocation, building);
                     }
                 } else if (intent.getStringExtra("status").equals("exit")) {
                     if (mActivity.currentMarker != null) {

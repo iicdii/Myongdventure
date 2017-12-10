@@ -6,5 +6,6 @@ package com.myongji.myongdventure.enums;
 
 public enum Building {
     ONE, // 1공학관
-    FIVE // 5공학관
+    FIVE, // 5공학관
+    HAM // 함박관
 }

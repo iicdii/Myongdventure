@@ -26,6 +26,14 @@ public class Quest {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
+    public Quest(String title, String content, QuestType type, Building building, int exp) {
+        this.title = title;
+        this.content = content;
+        this.type = type;
+        this.building = building;
+        this.exp = exp;
+    }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
