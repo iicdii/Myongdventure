@@ -8,6 +8,11 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 
+import com.myongji.myongdventure.activity.CreditActivity;
+import com.myongji.myongdventure.activity.MyQuestActivity;
+import com.myongji.myongdventure.activity.ProfileActivity;
+import com.myongji.myongdventure.activity.SettingActivity;
+
 /**
  * Created by KimVala on 2017-11-25.
  */

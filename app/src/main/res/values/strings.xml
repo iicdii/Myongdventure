@@ -2,4 +2,8 @@
     <string name="app_name">Myongdventure</string>
     <string name="app_title">명드벤처</string>
     <string name="title_activity_main">Map</string>
+    <string name="permission_rationale">permission_rationale</string>
+    <string name="permission_denied_explanation">지오펜스 권한이 거절되었습니다.</string>
+    <string name="insufficient_permissions">지오펜스 권한이 없습니다.</string>
+    <string name="settings">settings</string>
 </resources>

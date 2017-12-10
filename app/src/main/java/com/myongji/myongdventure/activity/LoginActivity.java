@@ -1,4 +1,4 @@
-package com.myongji.myongdventure;
+package com.myongji.myongdventure.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.myongji.myongdventure.schema.User;
+import com.myongji.myongdventure.DBHelper;
+import com.myongji.myongdventure.R;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();

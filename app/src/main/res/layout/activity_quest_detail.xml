@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.myongji.myongdventure.QuestDetailActivity">
+    tools:context="com.myongji.myongdventure.activity.QuestDetailActivity">
 
     <TextView
         android:layout_width="wrap_content"

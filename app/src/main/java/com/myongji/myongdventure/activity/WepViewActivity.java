@@ -1,9 +1,11 @@
-package com.myongji.myongdventure;
+package com.myongji.myongdventure.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
+
+import com.myongji.myongdventure.R;
 
 public class WepViewActivity extends AppCompatActivity {
     WebView webView;

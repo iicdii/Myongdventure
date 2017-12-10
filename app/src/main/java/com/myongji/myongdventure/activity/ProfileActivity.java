@@ -1,7 +1,9 @@
-package com.myongji.myongdventure;
+package com.myongji.myongdventure.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.myongji.myongdventure.R;
 
 public class ProfileActivity extends AppCompatActivity {
 

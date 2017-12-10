@@ -8,7 +8,7 @@
     android:paddingTop="56dp"
     android:paddingLeft="24dp"
     android:paddingRight="24dp"
-    tools:context="com.myongji.myongdventure.LoginActivity">
+    tools:context="com.myongji.myongdventure.activity.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
