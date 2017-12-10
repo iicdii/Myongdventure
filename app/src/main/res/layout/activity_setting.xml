@@ -18,6 +18,8 @@
             android:text="효과음"/>
 
         <CheckBox
+            android:id="@+id/cb_sound"
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -30,9 +32,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="앙기모띠"/>
+            android:text="진동"/>
 
         <CheckBox
+            android:id="@+id/cb_vibrator"
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -52,5 +56,23 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_test1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="테스트용1"/>
+
+    <Button
+        android:id="@+id/btn_test2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="테스트용2"/>
+
+    <Button
+        android:id="@+id/btn_test3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="테스트용3"/>
 
 </LinearLayout>
