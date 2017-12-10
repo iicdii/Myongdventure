@@ -119,6 +119,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             } else {
                                 dbHelper.initUserListener(userUid);
                             }
+
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.putExtra("userId", userUid);
+                            startActivity(intent);
                         }
 
                         @Override
@@ -126,9 +130,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.i("user", databaseError.getMessage());
                         }
                     });
-
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
                 } else {
                     // 로그인 실패 시 유저에게 메세지를 보여준다.
                     Log.w("signIn:failure", "signInWithCredential:failure", task.getException());

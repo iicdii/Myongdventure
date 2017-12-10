@@ -21,6 +21,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
@@ -42,11 +44,21 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.myongji.myongdventure.BuildConfig;
 import com.myongji.myongdventure.Constants;
+import com.myongji.myongdventure.DBHelper;
 import com.myongji.myongdventure.GeofenceTransitionsIntentService;
 import com.myongji.myongdventure.MenuDialog;
 import com.myongji.myongdventure.R;
+import com.myongji.myongdventure.schema.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -58,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final LatLng DEFAULT_LOCATION = new LatLng(37.2232318, 127.1880301);
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final int DEFAULT_ZOOM = 10;
-    private static final int UPDATE_INTERVAL_MS = 4000;
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 3000;
+    private static final int UPDATE_INTERVAL_MS = 10000;
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 9000;
 
     private GoogleMap mMap;
     private GeofencingClient mGeofencingClient;
@@ -67,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient mFusedLocationClient;
     private PendingIntent mGeofencePendingIntent;
     private LocationCallback mLocationCallback;
+    private User currentUser = null;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference();
 
     protected Location mLastLocation;
 
@@ -74,6 +89,50 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        String uid = intent.getStringExtra("userId");
+
+        // 유저정보 가져오기
+        myRef.child("users").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                currentUser = dataSnapshot.getValue(User.class);
+
+                if (currentUser != null) {
+                    String level = String.valueOf(currentUser.level);
+                    String name = String.valueOf(currentUser.name);
+                    String levelName = "Lv. " + level + " " + name;
+                    String exp = String.valueOf(currentUser.exp);
+                    String nextExp = String.valueOf((currentUser.level+2) * currentUser.level * 5);
+                    String fullExp = exp + " / " + nextExp;
+
+                    TextView usernameTextView = findViewById(R.id.tv_username);
+                    usernameTextView.setText(levelName);
+                    TextView userexpTextView = findViewById(R.id.tv_userexp);
+                    userexpTextView.setText(fullExp);
+
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if (firebaseUser == null)
+                        return;
+
+                    Uri imageUrl = firebaseUser.getPhotoUrl();
+                    if (imageUrl != null) {
+                        ImageView userImageView = findViewById(R.id.iv_profile);
+                        Picasso.with(getApplicationContext()).load(imageUrl).into(userImageView);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("myRef", "Failed to read value.", error.toException());
+            }
+        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -95,10 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                Log.i("위치", "위치가 업데이트 되었습니다.");
                 mLastLocation = locationResult.getLastLocation();
-                Log.i("위치 x", Double.toString(mLastLocation.getLatitude()));
-                Log.i("위치 y", Double.toString(mLastLocation.getLongitude()));
             };
         };
 
@@ -124,15 +180,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             if (actionName.equals("googlegeofence")) {
                 String building = intent.getStringExtra("building");
+                String status = intent.getStringExtra("status");
+
+                if (building.isEmpty() || status.isEmpty()) return;
 
                 if (intent.getStringExtra("status").equals("enter")) {
                     if (mActivity.currentMarker == null) {
                         LatLng location = Constants.LANDMARKS.get(building);
-                        Location buildingLocation = new Location(building);
-                        buildingLocation.setLatitude(location.latitude);
-                        buildingLocation.setLongitude(location.longitude);
 
-                        mActivity.setBuildingMarker(buildingLocation, building);
+                        if (!Double.isNaN(location.latitude) && !Double.isNaN(location.longitude)) {
+                            Log.i("건물위치 x:", String.valueOf(location.latitude));
+                            Log.i("건물위치 y:", String.valueOf(location.longitude));
+
+                            Location buildingLocation = new Location(building);
+                            buildingLocation.setLatitude(location.latitude);
+                            buildingLocation.setLongitude(location.longitude);
+                            mActivity.setBuildingMarker(buildingLocation, building);
+                        }
                     }
                 } else if (intent.getStringExtra("status").equals("exit")) {
                     if (mActivity.currentMarker != null) {
