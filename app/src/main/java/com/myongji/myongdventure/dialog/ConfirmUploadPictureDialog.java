@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,7 +32,6 @@ import com.myongji.myongdventure.R;
 import com.myongji.myongdventure.activity.MainActivity;
 import com.myongji.myongdventure.enums.Status;
 import com.myongji.myongdventure.schema.User;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -108,7 +106,7 @@ public class ConfirmUploadPictureDialog extends Dialog {
                         Toast.makeText(getContext(), "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
 
                         // 유저정보 가져오기
-                        myRef.child("users").child(userId).addValueEventListener(new ValueEventListener() {
+                        myRef.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 // This method is called once with the initial value and again
@@ -126,8 +124,8 @@ public class ConfirmUploadPictureDialog extends Dialog {
                                         exp += gainExp;
                                     }
 
-                                    myRef.child("userQuests").child(userId).child(uid).child("level").setValue(level);
-                                    myRef.child("userQuests").child(userId).child(uid).child("exp").setValue(exp);
+                                    myRef.child("users").child(userId).child("level").setValue(level);
+                                    myRef.child("users").child(userId).child("exp").setValue(exp);
                                     myRef.child("userQuests").child(userId).child(uid).child("imageUrl").setValue(downloadUrl.toString());
                                     myRef.child("userQuests").child(userId).child(uid).child("status").setValue(Status.DONE);
                                 }

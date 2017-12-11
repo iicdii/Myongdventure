@@ -12,13 +12,10 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +28,7 @@ import com.myongji.myongdventure.PermissionRequester;
 import com.myongji.myongdventure.R;
 import com.myongji.myongdventure.dialog.ConfirmUploadPictureDialog;
 import com.myongji.myongdventure.dialog.ConfirmUploadVideoDialog;
+import com.myongji.myongdventure.enums.QuestType;
 import com.myongji.myongdventure.enums.Status;
 import com.myongji.myongdventure.schema.Quest;
 import com.myongji.myongdventure.schema.UserQuest;
@@ -66,56 +64,6 @@ public class MyQuestDetailActivity extends AppCompatActivity {
 
         mQuery = myRef.child("userQuests").child(userId).child(uid);
         final Query query = mQuery;
-
-        // 퀘스트 정보 가져오기
-        myRef.child("quests").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(final DataSnapshot questSnapshot) {
-                // 내 퀘스트 정보 가져오기
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot userQuestSnapshot) {
-                        UserQuest userQuest = userQuestSnapshot.getValue(UserQuest.class);
-
-                        if (userQuest == null) return;
-
-                        for (DataSnapshot d : questSnapshot.getChildren()) {
-                            if (d.getKey().equals(uid)) {
-                                mQuest = d.getValue(Quest.class);
-
-                                if (mQuest == null) return;
-
-                                TextView titleView = findViewById(R.id.tv_title);
-                                titleView.setText(mQuest.title);
-                                TextView contentView = findViewById(R.id.tv_content);
-                                contentView.setText(mQuest.content);
-                                TextView expView = findViewById(R.id.tv_exp);
-
-                                String exp = String.valueOf(mQuest.exp);
-                                String expText = "경험치: " + exp;
-
-                                TextView statusView = findViewById(R.id.tv_status);
-                                statusView.setText(userQuest.getStatusText());
-
-                                expView.setText(expText);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w("myRef", "Failed to read value.", error.toException());
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("myRef", "Failed to read value.", error.toException());
-            }
-        });
 
         btn1 = findViewById(R.id.btn_picture);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +112,64 @@ public class MyQuestDetailActivity extends AppCompatActivity {
                     }
                 }
 
+            }
+        });
+
+        // 퀘스트 정보 가져오기
+        myRef.child("quests").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot questSnapshot) {
+                // 내 퀘스트 정보 가져오기
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot userQuestSnapshot) {
+                        UserQuest userQuest = userQuestSnapshot.getValue(UserQuest.class);
+
+                        if (userQuest == null) return;
+
+                        for (DataSnapshot d : questSnapshot.getChildren()) {
+                            if (d.getKey().equals(uid)) {
+                                mQuest = d.getValue(Quest.class);
+
+                                if (mQuest == null) return;
+
+                                TextView titleView = findViewById(R.id.tv_title);
+                                titleView.setText(mQuest.title);
+                                TextView contentView = findViewById(R.id.tv_content);
+                                contentView.setText(mQuest.content);
+                                TextView expView = findViewById(R.id.tv_exp);
+
+                                String exp = String.valueOf(mQuest.exp);
+                                String expText = "경험치: " + exp;
+
+                                TextView statusView = findViewById(R.id.tv_status);
+                                statusView.setText(userQuest.getStatusText());
+
+                                expView.setText(expText);
+
+                                if(userQuest.status != Status.DONE) {
+                                    if (mQuest.type == QuestType.PICTURE) {
+                                        btn1.setVisibility(View.VISIBLE);
+                                    } else if (mQuest.type == QuestType.VIDEO) {
+                                        btn2.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("myRef", "Failed to read value.", error.toException());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("myRef", "Failed to read value.", error.toException());
             }
         });
     }

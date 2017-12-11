@@ -104,7 +104,7 @@ public class ConfirmUploadVideoDialog extends Dialog {
                         Toast.makeText(getContext(), "영상 업로드 성공", Toast.LENGTH_SHORT).show();
 
                         // 유저정보 가져오기
-                        myRef.child("users").child(userId).addValueEventListener(new ValueEventListener() {
+                        myRef.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 // This method is called once with the initial value and again
@@ -122,8 +122,8 @@ public class ConfirmUploadVideoDialog extends Dialog {
                                         exp += gainExp;
                                     }
 
-                                    myRef.child("userQuests").child(userId).child(uid).child("level").setValue(level);
-                                    myRef.child("userQuests").child(userId).child(uid).child("exp").setValue(exp);
+                                    myRef.child("users").child(userId).child("level").setValue(level);
+                                    myRef.child("users").child(userId).child("exp").setValue(exp);
                                     myRef.child("userQuests").child(userId).child(uid).child("videoUrl").setValue(downloadUrl.toString());
                                     myRef.child("userQuests").child(userId).child(uid).child("status").setValue(Status.DONE);
                                 }
